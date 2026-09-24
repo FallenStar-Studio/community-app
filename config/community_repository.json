@@ -4,6 +4,6 @@
   "guest_feed_url": "https://raw.githubusercontent.com/FallenStar-Studio/community/main/docs/feed.json",
   "mod_registry_url": "https://raw.githubusercontent.com/FallenStar-Studio/mod-registry/main/mods.json",
   "oauth_client_id": "",
-  "repository_ready": false,
-  "requests_enabled": false
+  "repository_ready": true,
+  "requests_enabled": true
 }

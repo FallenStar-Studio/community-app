@@ -357,9 +357,12 @@ func _sync_chrome() -> void:
 		status_label.text = I18n.status_label(str(content_status.get("code", "offline_demo")))
 		connect_button.text = I18n.text("account_connect")
 		connect_button.tooltip_text = connect_button.text
-		page_title_label.add_theme_font_size_override("font_size", 19 if phone else 23)
-		page_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART if phone else TextServer.AUTOWRAP_OFF
+		var long_title := page_title_label.text.length() > 34
+		page_title_label.add_theme_font_size_override("font_size", 18 if phone else (20 if long_title else 23))
+		page_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		page_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		if header_container != null:
+			header_container.custom_minimum_size.y = (68 if phone else 82) if long_title else (54 if phone else 58)
 		status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART if phone else TextServer.AUTOWRAP_OFF
 		status_label.max_lines_visible = 2 if phone else 1
 
