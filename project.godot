@@ -1,0 +1,44 @@
+; Plyra Community native prototype — Godot 4.7.2 stable
+config_version=5
+
+[application]
+config/name="Plyra Community"
+config/description="A lightweight, reusable community client prototype for the Plyra desktop ecosystem."
+run/main_scene="res://scenes/community_shell.tscn"
+run/max_fps=10
+config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[display]
+window/size/viewport_width=1360
+window/size/viewport_height=900
+window/size/window_width_override=1200
+window/size/window_height_override=800
+window/stretch/mode="disabled"
+window/energy_saving/keep_screen_on=false
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+textures/default_filters/anisotropic_filtering_level=1
+textures/vram_compression/import_etc2_astc=true
+environment/defaults/default_clear_color=Color(0.043, 0.055, 0.067, 1)
+2d/snap/snap_2d_transforms_to_pixel=false
+2d/snap/snap_2d_vertices_to_pixel=false
+
+
+[gui]
+theme/custom="res://themes/plyra_theme.tres"
+theme/default_font_multichannel_signed_distance_field=true
+
+[physics]
+common/physics_ticks_per_second=30
+common/physics_ticks_per_second2d=30
+
+[debug]
+gdscript/warnings/untyped_declaration=1
+gdscript/warnings/inference_on_variant=1
+
+[autoload]
+AppServices="*res://scripts/services/app_services.gd"
+I18n="*res://scripts/services/i18n_service.gd"

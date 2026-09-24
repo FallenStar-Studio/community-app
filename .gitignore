@@ -1,0 +1,7 @@
+.godot/
+artifacts/*.app/
+artifacts/*.zip
+artifacts/*.dmg
+artifacts/*.apk
+artifacts/*.log
+.DS_Store

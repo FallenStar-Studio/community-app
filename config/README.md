@@ -1,0 +1,1 @@
+Platform export settings live in the project root export_presets.cfg. The macOS preset is universal (Apple Silicon and Intel). Add Windows Desktop, Linux/X11, and Android ARM64 presets in Godot after installing the matching 4.7.2 export templates and platform SDKs. Keep credentials, signing certificates, and local custom-template paths out of committed presets.
