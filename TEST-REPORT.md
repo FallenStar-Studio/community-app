@@ -33,3 +33,12 @@ This is one short macOS session, not a comparative benchmark. GPU utilization pe
 - The macOS bundle is ad-hoc signed and not notarized; it is for local prototype use.
 
 Bundled demo fixtures remain available for offline mode, failed requests and automated tests. In the verified online run, the two displayed Discussions came from the GitHub public feed and the MOD page showed zero entries from the valid live registry response. MOD source/download URLs and hashes are empty; nothing in the prototype downloads or installs MODs.
+
+## 2026-09-30 OAuth registration / OAuth 注册核验
+
+- With user confirmation, registered **Plyra Community** under **FallenStar-Studio**. Client ID: `Ov23li9j7XtBsvn6LMck`. Verified Device Flow enabled and access-token expiration active (8 hours). No client secret was generated. / 经用户确认，在组织下注册应用；已核验 Device Flow 与 8 小时访问令牌到期设置。未生成 Client Secret。
+- `POST https://github.com/login/device/code`, using the public Client ID and no requested scopes, returned HTTP 200 with the expected code/URL/expiry/interval fields. The code was not authorized or polled; no access token was obtained. Device and user codes were not retained in the report. / 公开 Client ID 请求设备验证码接口返回 HTTP 200 及预期字段；未请求 scope，未授权或轮询，未获得访问令牌。报告未保存设备码或用户验证码。
+- Configured the public Client ID in the Godot project and corrected English/Chinese account status and sign-in messages to distinguish registered configuration from the unimplemented login flow. / 已写入公开 Client ID，并修正中英文授权状态与登录提示，明确区分注册配置和未实现的登录流程。
+- Re-ran Godot resource import and the existing headless suite: **33 passed, 0 failed**. Re-exported the macOS universal prototype. These checks do not verify interactive login or platform input. / 再次导入 Godot 资源并运行现有无界面检查：**33 通过、0 失败**；重新导出 macOS 通用原型。这些检查不能代表交互式登录或平台输入已经验证。
+- Client-side Device Flow, access-token storage/refresh, authenticated GraphQL browsing, posting and commenting remain unimplemented or unverified as recorded above. / 客户端 Device Flow、令牌存储/刷新、授权 GraphQL 浏览、发帖与评论仍按上文记载处于未实现或未验证状态。
+- NativeHub source integration was assessed; no source was copied, no broad UI restructuring was performed and no Rust extension was added. The Cloud Environment Setup brief was prepared; no cloud environment was created or published. / 已评估 NativeHub 融合，未复制源码、未进行大规模界面重构、未增加 Rust 扩展；已准备 Cloud Environment Setup 配置要求，尚未创建或发布云环境。

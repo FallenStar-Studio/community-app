@@ -3,8 +3,8 @@ extends Node
 
 signal authorization_changed(is_authorized: bool)
 
-## Public-client authorization seam. Device Flow is intentionally disabled until
-## a GitHub OAuth App Client ID and a permission review are supplied.
+## Public-client authorization seam. The organization-owned Client ID is configured,
+## but Device Flow and user-token handling are not implemented yet.
 var client_id := ""
 var _access_token := ""
 

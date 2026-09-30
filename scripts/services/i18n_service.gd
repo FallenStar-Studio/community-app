@@ -90,7 +90,8 @@ const COPY := {
 	"download_unavailable": ["Downloads unavailable", "下载尚未开放"],
 	"github_connection": ["GitHub connection", "GitHub 连接"],
 	"authorization": ["Authorization", "授权"],
-	"not_connected": ["Guest · OAuth Client ID is not configured", "游客 · OAuth Client ID 尚未配置"],
+	"not_connected": ["Guest · Not signed in", "游客 · 尚未登录"],
+	"auth_setup_pending": ["Client ID configured · Sign-in implementation pending", "Client ID 已配置 · 登录实现待完成"],
 	"content_source": ["Content source", "内容来源"],
 	"online_repository": ["Online repository", "线上仓库"],
 	"not_configured": ["FallenStar-Studio/community · pending setup", "FallenStar-Studio/community · 等待初始化"],
@@ -122,6 +123,7 @@ const COPY := {
 	"image_caption": ["Plyra world · community artwork", "Plyra 世界 · 社区视觉创作"],
 	"footer_local": ["LOCAL PREVIEW  ·  Bundled sample content", "本地预览 · 项目内置演示内容"],
 	"toast_github": ["GitHub OAuth is not configured yet. Guest content remains available.", "GitHub OAuth 尚未配置。你仍可使用游客内容。"],
+	"toast_device_flow_pending": ["OAuth App registered. Device Flow is not implemented yet; guest browsing is available.", "OAuth App 已注册，Device Flow 尚未实现；目前可使用游客浏览。"],
 	"toast_write": ["This demo cannot publish to GitHub.", "当前演示版本不会向 GitHub 发布内容。"],
 	"status_guest": ["Browsing as guest", "当前为游客浏览"],
 	"status_offline": ["Offline-ready preview", "离线可浏览预览版"],
@@ -204,7 +206,7 @@ func auth_error_label(code: String) -> String:
 		"oauth_not_configured":
 			return text("toast_github")
 		"device_flow_not_implemented":
-			return text("toast_github")
+			return text("toast_device_flow_pending")
 		_:
 			return text("status_permission_error")
 

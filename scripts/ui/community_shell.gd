@@ -735,6 +735,8 @@ func _render_settings() -> void:
 	auth.add_child(auth_stack)
 	auth_stack.add_child(_label(I18n.text("github_connection"), 16, TEXT))
 	var auth_status := I18n.text("connected_as") if AppServices.auth.is_authorized() else I18n.text("not_connected")
+	if not AppServices.auth.is_authorized() and not AppServices.auth.client_id.is_empty():
+		auth_status = I18n.text("auth_setup_pending")
 	var content_status: Dictionary = AppServices.community.content_status()
 	_add_status_row(auth_stack, I18n.text("authorization"), auth_status)
 	_add_status_row(auth_stack, I18n.text("content_source"), I18n.status_label(str(content_status.get("code", "offline_demo"))))

@@ -12,7 +12,7 @@ Plyra Community App 是一个独立运行的 Godot 客户端原型，用于浏�
 |---|---|---|
 | Client / 客户端 | Godot 4.7.2 prototype; macOS app export; English/Simplified Chinese UI; bundled demo discussions and MOD cards. / Godot 4.7.2 原型、macOS 应用导出、英语/简体中文界面、本地演示讨论与 MOD 卡片。 | Android, Windows and Linux exports and device/platform QA. / Android、Windows、Linux 导出及设备/平台验收。 |
 | Public content / 公开内容 | Verified guest HTTP reads from the live Discussions feed and MOD registry; GraphQL category/list/detail adapters; visible source labels; local mock fallback; API error handling. / 已验证真实 Discussions Feed 与 MOD 注册表的游客 HTTP 读取；已实现 GraphQL 分类、列表和详情适配器、来源标识、本地 Mock 回退及 API 错误处理。 | Live authenticated GraphQL reads are not yet verified against an authorized account. / 尚未通过已授权账号验证实时 GraphQL 读取。 |
-| GitHub account / GitHub 账号 | Auth provider interface and sign-in entry point. / 授权服务接口与登录入口。 | Device Flow, token handling, posting and commenting are not implemented or tested. / Device Flow、令牌处理、发帖与评论尚未实现或测试。 |
+| GitHub account / GitHub 账号 | Organization-owned OAuth App registered; public Client ID configured; Device Flow entry verified; auth provider interface and sign-in entry point. / 组织 OAuth App 已注册、公开 Client ID 已配置、Device Flow 入口已验证，已有授权服务接口与登录入口。 | Client-side Device Flow, token handling, posting and commenting are not implemented or tested. / 客户端 Device Flow、令牌处理、发帖与评论尚未实现或测试。 |
 | MODs / MOD | Read-only metadata display. / 只读元数据展示。 | Registry submissions are reviewed by pull request. This client does not install MODs. / 通过 Pull Request 审核注册表条目；本客户端不安装 MOD。 |
 | Plyra ecosystem / Plyra 生态 | The community client is a standalone prototype. / 社区客户端为独立原型。 | Plyra Compositor, Plyra World and a released MOD ecosystem are not represented as released products. / Plyra Compositor、Plyra World 和 MOD 生态尚未正式发布。 |
 
@@ -39,6 +39,10 @@ The bundled demo content remains available offline. Public feed and MOD registry
 - `scripts/tests/` — headless data and adapter checks / 无界面数据与适配器检查
 
 See [GitHub integration](docs/github-integration.md), [architecture](docs/architecture.md), and [verification report](TEST-REPORT.md).
+
+See [NativeHub integration review / NativeHub 融合评估](docs/nativehub-integration-review.md) and [Cloud Environment Setup / 云开发环境配置](docs/cloud-environment-setup.md) for proposed next steps; neither represents a completed UI migration or published cloud environment.
+
+下一步方案见上述融合评估与云环境配置文档；这些方案不表示 UI 移植或云环境发布已经完成。
 
 See the organization repositories for the community itself and the separately maintained MOD registry: [Plyra Community](https://github.com/FallenStar-Studio/community), [Plyra MOD Registry](https://github.com/FallenStar-Studio/mod-registry).
 
