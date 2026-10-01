@@ -35,6 +35,9 @@ func uses_live_mods() -> bool:
 func content_status() -> Dictionary:
 	return {"source": "demo", "code": "offline_demo"}
 
+func mod_content_status() -> Dictionary:
+	return content_status()
+
 func accept_public_feed(_payload: Dictionary) -> Dictionary:
 	return {"ok": false, "code": "unsupported", "message": "This service does not accept public feeds."}
 

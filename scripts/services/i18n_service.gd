@@ -4,6 +4,9 @@ signal language_changed(language_code: String)
 
 var language_code := "en"
 
+func _ready() -> void:
+	language_code = UiPreferences.language_code
+
 const COPY := {
 	"nav_home": ["Home", "首页"],
 	"nav_discussions": ["Discussions", "社区讨论"],
@@ -72,7 +75,7 @@ const COPY := {
 	"back_mods": ["←  Back to MOD library", "←  返回 MOD 目录"],
 	"reply_button": ["Reply to discussion", "回复这条讨论"],
 	"reply_notice": ["Creating posts and comments is not implemented or tested yet.", "发帖与评论尚未实现，也未经过测试。"],
-	"no_comments": ["No demo comments yet.", "还没有演示评论。"],
+	"no_comments": ["No comments yet.", "暂无评论。"],
 	"mod_safety_title": ["A curated index, not an installer", "精选索引，而非安装器"],
 	"mod_safety_body": ["The directory only reads published metadata. This client does not download or install MODs.", "目录只读取已发布的元数据；本客户端不会下载或安装 MOD。"],
 	"demo_no_download": ["DEMO · NO DOWNLOAD", "演示 · 无下载"],
@@ -101,6 +104,7 @@ const COPY := {
 	"connected_as": ["Connected as GitHub user", "已连接 GitHub 账号"],
 	"status_live_feed": ["Public GitHub feed", "GitHub 公开 Feed"],
 	"status_live_api": ["Live GitHub Discussions API", "GitHub Discussions 实时 API"],
+	"status_live_registry": ["Public MOD registry", "公开 MOD 注册表"],
 	"status_demo_fallback": ["Local demo fallback · no live data was loaded", "本地演示回退 · 尚未载入实时数据"],
 	"status_pending": ["Waiting for repository setup approval", "等待仓库初始化确认"],
 	"status_network_error": ["Network unavailable · showing local demo data", "网络不可用 · 显示本地演示数据"],
@@ -113,7 +117,7 @@ const COPY := {
 	"ime_placeholder": ["Try Chinese IME composition, candidates and long-form editing…", "试试中文输入法、候选词与长文本编辑…"],
 	"characters": ["%d characters · session only", "%d 个字符 · 仅本次运行保留"],
 	"appearance_title": ["Visual language & reusable UI", "视觉体系与可复用界面"],
-	"appearance_body": ["Plyra Afterglow · GL Compatibility · native Godot Control UI", "Plyra 暮光主题 · GL Compatibility · 原生 Godot Control 界面"],
+	"appearance_body": ["Graphite blocks · GL Compatibility · native Godot Control UI", "石墨方块主题 · GL Compatibility · 原生 Godot Control 界面"],
 	"appearance_components": ["Shared Theme · modular cards · reusable scenes", "统一 Theme · 模块化卡片 · 可复用场景"],
 	"performance_title": ["Lightweight rendering & engine telemetry", "轻量渲染与引擎遥测"],
 	"performance_note": ["Engine memory is not the same as system GPU utilization.", "引擎显存指标不等同于系统 GPU 利用率。"],
@@ -129,7 +133,40 @@ const COPY := {
 	"status_offline": ["Offline-ready preview", "离线可浏览预览版"],
 	"mod_type_theme": ["Desktop theme", "桌面主题"],
 	"mod_type_widget": ["Desktop widget", "桌面小组件"],
-	"mod_type_world": ["World asset", "世界资源"]
+	"mod_type_world": ["World asset", "世界资源"],
+	"topics": ["TOPICS", "讨论分类"],
+	"mod_types": ["MOD TYPES", "MOD 类型"],
+	"read_discussion": ["Select a discussion to read", "选择一条讨论开始阅读"],
+	"read_mod": ["Select a MOD to inspect", "选择一个 MOD 查看详情"],
+	"reader_hint": ["Choose an entry from the list. Drag the divider to adjust the reading width.", "从列表中选择内容，拖动分隔线可调整阅读区宽度。"],
+	"open_github": ["Open on GitHub ↗", "在 GitHub 打开 ↗"],
+	"source_public": ["Public GitHub content", "GitHub 公开内容"],
+	"source_demo": ["Local Demo · offline", "本地 Demo · 离线"],
+	"source_demo_note": ["Bundled sample content. Nothing is published or downloaded.", "项目内置样例，不会发布或下载内容。"],
+	"source_public_note": ["Guest feed from community; MOD metadata from mod-registry. Search runs locally.", "游客 Feed 来自 community，MOD 元数据来自 mod-registry；搜索在本地完成。"],
+	"source_demo_status": ["LOCAL DEMO · offline sample content", "本地 DEMO · 离线样例内容"],
+	"source_loading": ["Loading public content… · entries marked DEMO are local samples", "正在载入公开内容… · 标记 DEMO 的条目为本地样例"],
+	"source_cached_error": ["GitHub request failed · keeping loaded content", "GitHub 请求失败 · 保留已载入内容"],
+	"empty_registry": ["The live registry has no accepted MODs yet. You can preview sample entries in Settings → Local Demo.", "真实注册表暂无已收录 MOD。可在设置中切换“本地 Demo”查看样例。"],
+	"language": ["Language / 语言", "语言 / Language"],
+	"guest_short": ["Guest", "游客"],
+	"back_list": ["← List", "← 列表"],
+	"read_label": ["READING", "阅读区"],
+	"close": ["Close", "关闭"],
+	"account_title": ["GitHub account", "GitHub 账号"],
+	"account_body": ["You can browse public content as a guest. The OAuth App is registered; in-app sign-in, posting and commenting are still pending. Use GitHub in your browser to participate.", "可使用游客身份浏览公开内容。OAuth App 已注册，应用内登录、发帖和评论仍待实现。参与讨论请在浏览器中使用 GitHub。"],
+	"read_more": ["READ →", "阅读 →"],
+	"app_about": ["ABOUT PLYRA", "关于 PLYRA"],
+	"app_about_body": ["An independent Godot community client prototype. Plyra Compositor, World and the MOD ecosystem are still in development.", "独立运行的 Godot 社区客户端原型。Plyra Compositor、World 与 MOD 生态仍在开发中。"],
+	"art_label": ["PLYRA / WORLD ART", "PLYRA / 世界视觉"],
+	"source_retry": ["Retry", "重试"],
+	"source_refresh": ["Refresh", "刷新"],
+	"background_motion": ["Background motion", "背景动态"],
+	"motion_adaptive": ["Adaptive · pause when idle", "自适应 · 静止后暂停"],
+	"motion_continuous": ["Continuous · 15 FPS idle cap", "持续动态 · 静止上限 15 FPS"],
+	"motion_off": ["Off · static background", "关闭 · 静态背景"],
+	"motion_note": ["Subtle 2D block orbits. Adaptive freezes after four idle seconds. Continuous motion uses more resources; all motion pauses when the window loses focus.", "轻微的 2D 方块轨道。自适应模式在静止四秒后冻结；持续动态会增加占用，窗口失去焦点时暂停。"],
+	"background_preview": ["BLOCK ORBITS / PREVIEW", "方块轨道 / 预览"]
 }
 
 func text(key: String) -> String:
@@ -141,7 +178,10 @@ func field(record: Dictionary, key: String) -> String:
 	var localized_key := key + suffix
 	if record.has(localized_key) and not str(record[localized_key]).is_empty():
 		return str(record[localized_key])
-	return str(record.get(key, ""))
+	var raw := str(record.get(key, ""))
+	if not raw.is_empty():
+		return raw
+	return str(record.get(key + ("_en" if language_code == "zh" else "_zh"), ""))
 
 func category_label(name: String, code: String = "") -> String:
 	var language := code if not code.is_empty() else language_code
@@ -186,6 +226,8 @@ func status_label(code: String) -> String:
 			return text("status_live_feed")
 		"live_api":
 			return text("status_live_api")
+		"live_registry":
+			return text("status_live_registry")
 		"repository_pending", "repository_not_configured":
 			return text("status_pending")
 		"network_error", "http_error", "invalid_response", "invalid_feed":
@@ -210,8 +252,10 @@ func auth_error_label(code: String) -> String:
 		_:
 			return text("status_permission_error")
 
-func set_language(code: String) -> void:
+func set_language(code: String, persist: bool = true) -> void:
 	var next := "zh" if code == "zh" else "en"
+	if persist:
+		UiPreferences.set_language(next)
 	if next == language_code:
 		return
 	language_code = next

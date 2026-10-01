@@ -17,3 +17,5 @@ jobs:
         run: /tmp/godot/Godot_v4.7.2-stable_linux.x86_64 --headless --path . --editor --quit
       - name: Run data and model tests
         run: /tmp/godot/Godot_v4.7.2-stable_linux.x86_64 --headless --path . --script res://scripts/tests/test_runner.gd
+      - name: Check bilingual desktop and phone layouts
+        run: /tmp/godot/Godot_v4.7.2-stable_linux.x86_64 --headless --path . res://scripts/tests/ui_layout_checks.tscn -- --demo

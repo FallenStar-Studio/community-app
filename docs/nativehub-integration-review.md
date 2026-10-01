@@ -10,9 +10,9 @@ Keep the independent Godot 4 client. Adapt NativeHub's useful interaction patter
 
 保留独立的 Godot 4 客户端，将 NativeHub 有价值的交互结构和服务边界应用到 Control 场景与 GDScript。直接嵌入 Rust/egui 界面会增加第二套 UI 运行环境，当前社区客户端尚无明确收益。两项目确实需要同一套经过验证的 API/授权核心时，再评估共享 Rust 库。
 
-This is an integration assessment, not a completed UI redesign or authenticated client release. No NativeHub source code has been copied into the Godot app.
+The first Godot interaction migration is now implemented; see [Block UI](block-native-ui.md). This is still a prototype, not an authenticated client release. No NativeHub source code has been copied into the Godot app.
 
-本文为融合评估，不表示界面重构或已授权客户端已经完成。尚未向 Godot 应用复制 NativeHub 源码。
+首轮 Godot 交互结构移植已实现，详见方块界面文档。它仍是原型，不代表已授权客户端正式发布。未向 Godot 应用复制 NativeHub 源码。
 
 ## Reuse map / 可复用内容
 
@@ -21,9 +21,9 @@ This is an integration assessment, not a completed UI redesign or authenticated 
 | `src/engine/mod.rs`: operations interface; `src/backend.rs`: action/event bridge | Keep API work in `GitHubDiscussionClient` and `AppServices`; views consume normalized `DiscussionEntry`/`ModEntry`. / API 留在服务层，界面使用规范化模型。 | Existing boundary; no Rust bridge required. / 已有边界，无需 Rust 桥接。 |
 | `src/modules/auth.rs`: device-code request and polling states | Independently implement pending, slow-down, denied, expired and cancellation states in `GitHubAuthProvider`. / 在授权服务中独立实现等待、减速、拒绝、到期和取消。 | Planned. Client ID registration is complete; login is still a stub. / 规划；Client ID 已注册，登录仍是占位实现。 |
 | `src/context.rs`, `src/backend.rs`: system keyring storage | Define a token-store interface; use platform credential storage only after platform validation. / 建立令牌存储接口，平台验证后接入安全存储。 | Planned. Never copy or import NativeHub/gh account tokens. / 规划；不复制或导入 NativeHub/gh 的账号令牌。 |
-| `src/ui/app.rs`: side panels, central reading view and tabs | Desktop: category rail plus a linear thread list and resizable reading pane. Phone: list and reader on separate screens. / 桌面采用分类栏、线性帖子列表和可调宽度阅读区；手机采用列表、阅读分屏页面。 | Proposed next UI iteration. / 建议用于下一轮界面迭代。 |
-| `src/ui/components.rs`: corner emphasis and strong pressed feedback | Native Control buttons with square StyleBoxFlat borders, a distinct focus ring, a left selection strip and a small press offset. / 使用直角描边、独立焦点框、选中侧边条和小幅按压位移。 | Pattern review complete; component migration pending. / 结构评估完成，组件移植待做。 |
-| `src/ui/style.rs`, `src/i18n/strings.rs`: dark/cyan palette and keyed translations | Maintain shared Theme/design tokens and English/Simplified Chinese strings, with layout-specific minimum widths. / 统一 Theme、设计 Token 与中英文文案，按布局定义最小宽度。 | Existing Godot mechanisms; further consolidation planned. / Godot 已有对应机制，下一步进一步统一。 |
+| `src/ui/app.rs`: side panels, central reading view and tabs | Desktop: category rail plus a linear thread list and resizable reading pane. Phone: list and reader on separate screens. / 桌面采用分类栏、线性帖子列表和可调宽度阅读区；手机采用列表、阅读分屏页面。 | Implemented in native Control containers. / 已在原生 Control 容器中实现。 |
+| `src/ui/components.rs`: corner emphasis and strong pressed feedback | Native Control buttons with square StyleBoxFlat borders, a distinct focus ring, a left selection strip and a small press offset. / 使用直角描边、独立焦点框、选中侧边条和小幅按压位移。 | Implemented with shared Tokens/Theme. / 已使用共用 Token/Theme 实现。 |
+| `src/ui/style.rs`, `src/i18n/strings.rs`: dark/cyan palette and keyed translations | Maintain shared Theme/design tokens and English/Simplified Chinese strings, with layout-specific minimum widths. / 统一 Theme、设计 Token 与中英文文案，按布局定义最小宽度。 | Consolidated and covered by layout checks. / 已统一并纳入布局检查。 |
 | `src/ui/image_loader.rs`: asynchronous loading state and cache | A bounded HTTPS image service with timeout, size limits, failure placeholders and repaint only when content changes. / 有界 HTTPS 图片服务，包含超时、大小上限、失败占位，仅在内容变化时更新。 | Planned; its Rust loader is not directly imported. / 规划，尚未导入 Rust 加载器。 |
 
 ## Issues to address before code reuse / 源码复用前需要处理的问题
@@ -41,9 +41,9 @@ The community's primary view should begin with discussions. Use a compact title/
 
 社区主界面从讨论开始：紧凑标题和工具栏、清楚可读的列表行、可见分类、持久选中状态。艺术创作作为小型社区封面或阅读附件；数量放在对应分区标题旁。网络、来源与登录状态用普通文案表达；项目开发说明进入关于或帮助内容。
 
-Desktop minimums should reserve a 180–220 px category rail, at least 340 px for a list, and at least 420 px for a reader when a split view fits. Below the combined minimum, use a single reading/list pane. On phones use one list column, a separate reader and a compact bottom navigation. Make reading text about 15–16 px at scale 1 with clear line spacing. These are proposed design tokens, not verified measurements of the current UI.
+The implemented tokens reserve a 204 px category rail, at least 340 px for a list and 420 px for a split reader. At widths below 1100 px the content uses a single pane; below 760 px it switches to phone navigation. Body text is 15 px with 6 px line separation. Layout checks cover ten viewport widths in both languages; platform keyboard/IME checks remain separate.
 
-桌面分类栏建议 180–220 px，列表至少 340 px，双栏阅读区至少 420 px；不足合计最小宽度时切换为单个列表或阅读区。手机采用单列列表、独立阅读页和紧凑底部导航。正文在 1 倍缩放下建议约 15–16 px，保持清晰行距。以上是待实现的设计 Token，不是当前界面已经验证的尺寸。
+已实现的 Token 使用 204 px 分类栏，列表至少 340 px、双栏阅读区至少 420 px。低于 1100 px 使用单内容区，低于 760 px 切换手机导航。正文 15 px、额外行距 6 px。布局检查覆盖十种宽度和两种语言；平台键盘/输入法仍需单独验收。
 
 Both language modes must use native wrapping and selection. Verify mixed Chinese/English titles, unbroken URLs, IME composition, a software keyboard and real empty/error states before describing the new layout as ready.
 

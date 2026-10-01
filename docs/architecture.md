@@ -12,6 +12,8 @@
 - 游客通过生成的静态 JSON Feed 浏览公开内容。需要授权的 GraphQL 查询由授权服务控制，但当前授权服务仍是占位实现。发帖和评论 mutation 尚未实现。
 - Presentation uses Godot Control nodes, shared Theme styles, design tokens and modular scenes. The prototype is a lightweight 2D application with GL Compatibility; no 3D world, compositor hook or background polling is used.
 - 展示层使用 Godot Control 节点、共享 Theme 样式、设计 Token 与模块化场景。原型采用 GL Compatibility 轻量 2D 配置，不含 3D 世界、合成器接口或后台轮询。
+- `UiPreferences` stores only language and background-motion preferences. The reusable `BlockOrbits` Control is independent of content and auth services; it has bounded 2D geometry, focus/idle suspension and no network access.
+- `UiPreferences` 仅保存语言及背景动态偏好。可复用 `BlockOrbits` Control 独立于内容及授权服务，几何数量固定，支持焦点/静止暂停且不访问网络。
 
 ## Intended boundaries / 设计边界
 

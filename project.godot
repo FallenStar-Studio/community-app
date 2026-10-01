@@ -40,5 +40,6 @@ gdscript/warnings/untyped_declaration=1
 gdscript/warnings/inference_on_variant=1
 
 [autoload]
+UiPreferences="*res://scripts/services/ui_preferences.gd"
 AppServices="*res://scripts/services/app_services.gd"
 I18n="*res://scripts/services/i18n_service.gd"

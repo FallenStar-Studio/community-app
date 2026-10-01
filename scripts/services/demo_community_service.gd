@@ -86,9 +86,9 @@ func _load_entries(path: String, is_discussion: bool) -> Array[Dictionary]:
 		if not valid:
 			continue
 		var record := DiscussionEntry.normalize(raw) if is_discussion else ModEntry.normalize(raw)
+		record["source"] = "demo"
+		record["is_demo"] = true
 		if is_discussion:
-			record["source"] = "demo"
-			record["is_demo"] = true
 			for comment: Variant in record.get("comments", []):
 				if comment is Dictionary:
 					comment["source"] = "demo"

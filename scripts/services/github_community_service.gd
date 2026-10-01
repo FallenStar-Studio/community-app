@@ -13,6 +13,7 @@ var _live_feed_loaded := false
 var _live_categories_loaded := false
 var _live_mods_loaded := false
 var _status := {"source": "demo", "code": "offline_demo", "message": "Showing bundled demo content."}
+var _mod_status := {"source": "demo", "code": "offline_demo"}
 var _discussion_by_id: Dictionary = {}
 
 func _init() -> void:
@@ -27,6 +28,9 @@ func service_label() -> String:
 
 func content_status() -> Dictionary:
 	return _status.duplicate(true)
+
+func mod_content_status() -> Dictionary:
+	return _mod_status.duplicate(true)
 
 func uses_live_discussions() -> bool:
 	return _live_feed_loaded or _live_discussions_loaded
@@ -115,6 +119,7 @@ func accept_mod_registry(raw_entries: Variant) -> Dictionary:
 		normalized.append(entry)
 	_mods = normalized
 	_live_mods_loaded = true
+	_mod_status = {"source": "github_registry", "code": "live_registry"}
 	content_changed.emit()
 	return {"ok": true, "count": _mods.size()}
 
@@ -172,7 +177,11 @@ func accept_graphql_detail(payload: Dictionary) -> Dictionary:
 
 func set_failure(failure: Dictionary) -> void:
 	var code := str(failure.get("code", "request_failed"))
-	_status = {"source": "demo", "code": code, "message": str(failure.get("message", "GitHub request failed."))}
+	var status := {"source": "demo", "code": code, "message": str(failure.get("message", "GitHub request failed."))}
+	if str(failure.get("operation", "")) == "mod_registry":
+		_mod_status = status
+	else:
+		_status = status
 	content_changed.emit()
 
 func refresh() -> Dictionary:

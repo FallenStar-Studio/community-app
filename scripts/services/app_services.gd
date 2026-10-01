@@ -1,6 +1,9 @@
 extends Node
 
+signal community_service_changed
+
 const CommunitySource = preload("res://scripts/services/github_community_service.gd")
+const DemoSource = preload("res://scripts/services/demo_community_service.gd")
 const AuthProvider = preload("res://scripts/services/github_auth_provider.gd")
 const DiscussionClient = preload("res://scripts/services/github_discussion_client.gd")
 
@@ -8,9 +11,15 @@ var community: CommunityService
 var auth: GitHubAuthProvider
 var github_client: GitHubDiscussionClient
 var repository_config: Dictionary = {}
+var demo_mode := false
+var _github_community: GitHubCommunityService
+var _demo_community: CommunityService
 
 func _ready() -> void:
-	community = CommunitySource.new()
+	_github_community = CommunitySource.new()
+	_demo_community = DemoSource.new()
+	demo_mode = OS.get_cmdline_user_args().has("--demo")
+	community = _demo_community if demo_mode else _github_community
 	auth = AuthProvider.new()
 	github_client = DiscussionClient.new()
 	add_child(auth)
@@ -20,12 +29,21 @@ func _ready() -> void:
 	github_client.configure(repository_config, auth)
 	github_client.request_completed.connect(_on_github_request_completed)
 	if not bool(repository_config.get("repository_ready", false)):
-		community.set_failure({"code": "repository_pending", "message": "Waiting for GitHub repository bootstrap."})
-	if bool(repository_config.get("requests_enabled", false)):
+		_github_community.set_failure({"code": "repository_pending", "message": "Waiting for GitHub repository bootstrap."})
+	if bool(repository_config.get("requests_enabled", false)) and not demo_mode:
 		refresh_community()
 
 func set_community_service(service: CommunityService) -> void:
 	community = service
+	community_service_changed.emit()
+
+func set_demo_mode(enabled: bool) -> void:
+	if demo_mode == enabled:
+		return
+	demo_mode = enabled
+	set_community_service(_demo_community if demo_mode else _github_community)
+	if not demo_mode:
+		refresh_community()
 
 func service_status() -> String:
 	return community.service_label() if community != null else "Service unavailable"
@@ -35,7 +53,7 @@ func repository_label() -> String:
 	return "%s · %s" % [repo, "ready" if bool(repository_config.get("repository_ready", false)) else "pending setup"]
 
 func refresh_community() -> void:
-	if github_client == null:
+	if github_client == null or demo_mode:
 		return
 	github_client.fetch_mod_registry()
 	if auth != null and auth.is_authorized():
@@ -45,7 +63,7 @@ func refresh_community() -> void:
 		github_client.fetch_public_feed()
 
 func fetch_discussion_detail(record: Dictionary) -> void:
-	if github_client == null or auth == null or not auth.is_authorized():
+	if demo_mode or github_client == null or auth == null or not auth.is_authorized():
 		return
 	var number := int(record.get("number", 0))
 	if number > 0:
@@ -60,28 +78,30 @@ func _load_repository_config() -> Dictionary:
 
 func _on_github_request_completed(operation: String, ok: bool, payload: Dictionary, failure: Dictionary) -> void:
 	if not ok:
-		community.set_failure(failure)
+		failure["operation"] = operation
+		_github_community.set_failure(failure)
 		return
 	match operation:
 		"guest_feed":
-			var result: Dictionary = community.accept_public_feed(payload)
+			var result: Dictionary = _github_community.accept_public_feed(payload)
 			if not bool(result.get("ok", false)):
-				community.set_failure(result)
+				_github_community.set_failure(result)
 		"mod_registry":
-			var result: Dictionary = community.accept_mod_registry(payload.get("entries", []))
+			var result: Dictionary = _github_community.accept_mod_registry(payload.get("entries", []))
 			if not bool(result.get("ok", false)):
-				community.set_failure(result)
+				result["operation"] = operation
+				_github_community.set_failure(result)
 		"categories":
-			var result: Dictionary = community.accept_graphql_categories(payload)
+			var result: Dictionary = _github_community.accept_graphql_categories(payload)
 			if not bool(result.get("ok", false)):
-				community.set_failure(result)
+				_github_community.set_failure(result)
 			else:
 				github_client.fetch_discussions()
 		"discussions":
-			var result: Dictionary = community.accept_graphql_discussions(payload)
+			var result: Dictionary = _github_community.accept_graphql_discussions(payload)
 			if not bool(result.get("ok", false)):
-				community.set_failure(result)
+				_github_community.set_failure(result)
 		"discussion_detail":
-			var result: Dictionary = community.accept_graphql_detail(payload)
+			var result: Dictionary = _github_community.accept_graphql_detail(payload)
 			if not bool(result.get("ok", false)):
-				community.set_failure(result)
+				_github_community.set_failure(result)
